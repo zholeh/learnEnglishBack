@@ -12,6 +12,7 @@
   "rules": {
     "import/prefer-default-export": false,
     "comma-dangle": 0,
+    "no-console": "off",
     "no-plusplus": 0,
     "func-names": 0,
     "no-mixed-operators": 0,
