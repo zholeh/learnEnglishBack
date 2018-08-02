@@ -35,7 +35,7 @@ const app = express();
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 (<any>mongoose).Promise = bluebird;
-mongoose.connect(mongoUrl, {useMongoClient: true}).then(
+mongoose.connect(mongoUrl, { useMongoClient: true }).then(
   () => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ },
 ).catch(err => {
   console.log("MongoDB connection error. Please make sure MongoDB is running. " + err);
@@ -66,6 +66,9 @@ app.use(lusca.xframe("SAMEORIGIN"));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
   res.locals.user = req.user;
+  res.append("Access-Control-Allow-Headers", ["Content-Type"]);
+  res.append("Access-Control-Allow-Origin", ["*"]);
+  // res.append("Access-Control-Allow-Methods", ["DELETE", "PUT", "GET", "POST"]);
   next();
 });
 app.use((req, res, next) => {

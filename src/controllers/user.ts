@@ -69,9 +69,6 @@ export let getSignup = (req: Request, res: Response) => {
   if (req.user) {
     return res.redirect("/");
   }
-  res.render("account/signup", {
-    title: "Create Account"
-  });
 };
 
 /**
@@ -88,7 +85,10 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
 
   if (errors) {
     req.flash("errors", errors);
-    return res.redirect("/signup");
+    return res.status(500).send({
+      statusCode: 1,
+      description: "Не верно указан логин!"
+    });
   }
 
   const user = new User({
@@ -99,8 +99,10 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err) { return next(err); }
     if (existingUser) {
-      req.flash("errors", { msg: "Account with that email address already exists." });
-      return res.redirect("/signup");
+      return res.status(500).send({
+        statusCode: 1,
+        description: "Account with that email address already exists."
+      });
     }
     user.save((err) => {
       if (err) { return next(err); }
@@ -108,7 +110,7 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
         if (err) {
           return next(err);
         }
-        res.redirect("/");
+        return res.send(user);
       });
     });
   });
