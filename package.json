@@ -1,7 +1,7 @@
 {
   "name": "learn-english-back",
   "version": "0.1.0",
-  "description": "Learn English",
+  "description": "English as a song",
   "repository": {
     "type": "git",
     "url": "https://github.com/zholeh/learnEnglishBack"
@@ -39,8 +39,10 @@
     "express": "^4.16.3",
     "express-flash": "0.0.2",
     "express-session": "^1.15.6",
+    "express-translate": "^0.4.0",
     "express-validator": "^4.3.0",
     "fbgraph": "^1.4.4",
+    "json-loader": "^0.5.7",
     "lodash": "^4.17.10",
     "lusca": "^1.6.1",
     "mongoose": "^4.13.14",
