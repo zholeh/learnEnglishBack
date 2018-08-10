@@ -43,6 +43,7 @@
     "express-validator": "^4.3.0",
     "fbgraph": "^1.4.4",
     "json-loader": "^0.5.7",
+    "jsonwebtoken": "^8.3.0",
     "lodash": "^4.17.10",
     "lusca": "^1.6.1",
     "mongoose": "^4.13.14",

@@ -17,7 +17,7 @@ import { MONGODB_URI, SESSION_SECRET } from './util/secrets';
 const MongoStore = mongo(session);
 
 // Load environment variables from .env file, where API keys and passwords are configured
-dotenv.config({ path: '.env.example' });
+dotenv.config({ path: '.env' });
 
 // Controllers (route handlers)
 import * as homeController from './controllers/home';
@@ -67,9 +67,10 @@ app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  res.append('Access-Control-Allow-Headers', ['Content-Type']);
+  // res.append('Access-Control-Allow-Headers', ['Content-Type']);
   res.append('Access-Control-Allow-Origin', ['*']);
   // res.append("Access-Control-Allow-Methods", ["DELETE", "PUT", "GET", "POST"]);
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
   next();
 });
 app.use((req, res, next) => {
@@ -137,7 +138,9 @@ const expressTranslate = new ExpressTranslate();
 expressTranslate.addLanguage('ua', require('../src/i18n/ua.json'));
 expressTranslate.addLanguage('en', require('../src/i18n/en.json'));
 expressTranslate.addLanguage('ru', require('../src/i18n/ru.json'));
-app.settings.expressTranslate = expressTranslate;
+// app.settings.expressTranslate = expressTranslate;
 // app.et = expressTranslate;
 
 export const et = expressTranslate;
+
+const jst = require('jsonwebtoken');

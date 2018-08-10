@@ -98,7 +98,6 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
     if (err) { return next(err); }
     if (existingUser) {
 
-      // const f3 = app.et.translate('ua', 'a');
       const err = new AppErrors('Account with that email address already exists.', 'account');
 
       req.flash('errors', err);
@@ -110,6 +109,8 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
         if (err) {
           return next(err);
         }
+        // user.email = '';
+        // user.tokens = jwt.sign(user, process.env.JWT_SECRET)
         return res.send(user);
       });
     });
