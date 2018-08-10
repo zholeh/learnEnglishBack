@@ -1,3 +1,7 @@
 {
-    
+    "account.Account with that email address already exists.": "Користувач із вказаним email існує.",
+    "email.Email is not valid": "Email не вірний",
+    "password.Password cannot be blank": "Пароль повинен бути заповнений",
+    "password.Password must be at least 4 characters long": "Пароль повинен бути більше ніж 4 символи",
+    "password.Passwords do not match": "Паролі не співпадають"
 }

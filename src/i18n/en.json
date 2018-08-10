@@ -1,3 +1,7 @@
 {
-    
+    "account.Account with that email address already exists.": "Account with that email address already exists.",
+    "email.Email is not valid": "Email is not valid",
+    "password.Password cannot be blank": "Password cannot be blank",
+    "password.Password must be at least 4 characters long": "",
+    "password.Passwords do not match": "Passwords do not match"
 }

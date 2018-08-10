@@ -35,11 +35,6 @@ const app = express();
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 
-const en = require('../src/i18n/en.json');
-const ua = require('../src/i18n/ua.json');
-
-// const ru = require("../src/i18n/ru.json");
-
 (<any>mongoose).Promise = bluebird;
 mongoose.connect(mongoUrl, { useMongoClient: true }).then(
   () => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ },
@@ -75,6 +70,10 @@ app.use((req, res, next) => {
   res.append('Access-Control-Allow-Headers', ['Content-Type']);
   res.append('Access-Control-Allow-Origin', ['*']);
   // res.append("Access-Control-Allow-Methods", ["DELETE", "PUT", "GET", "POST"]);
+  next();
+});
+app.use((req, res, next) => {
+  et.localeKey = req.body.localeKey || 'en';
   next();
 });
 app.use((req, res, next) => {
@@ -132,3 +131,13 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRe
 });
 
 export default app;
+
+const ExpressTranslate = require('express-translate');
+const expressTranslate = new ExpressTranslate();
+expressTranslate.addLanguage('ua', require('../src/i18n/ua.json'));
+expressTranslate.addLanguage('en', require('../src/i18n/en.json'));
+expressTranslate.addLanguage('ru', require('../src/i18n/ru.json'));
+app.settings.expressTranslate = expressTranslate;
+// app.et = expressTranslate;
+
+export const et = expressTranslate;

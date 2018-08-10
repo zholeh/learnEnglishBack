@@ -6,9 +6,10 @@ import { default as User, UserModel, AuthToken } from '../models/User';
 import { Request, Response, NextFunction } from 'express';
 import { IVerifyOptions } from 'passport-local';
 import { WriteError } from 'mongodb';
+import { AppErrors } from './errors';
+import { et } from '../app';
+
 const request = require('express-validator');
-
-
 /**
  * GET /login
  * Login page.
@@ -27,8 +28,8 @@ export let getLogin = (req: Request, res: Response) => {
  * Sign in using email and password.
  */
 export let postLogin = (req: Request, res: Response, next: NextFunction) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password cannot be blank').notEmpty();
+  req.assert('email', et.translate(et.localeKey, 'email' + '.' + 'Email is not valid')).isEmail();
+  req.assert('password', et.translate(et.localeKey, 'password' + '.' + 'Password cannot be blank')).notEmpty();
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
   const errors = req.validationErrors();
@@ -76,19 +77,16 @@ export let getSignup = (req: Request, res: Response) => {
  * Create a new local account.
  */
 export let postSignup = (req: Request, res: Response, next: NextFunction) => {
-  req.assert('email', 'Email is not valid').isEmail();
-  req.assert('password', 'Password must be at least 4 characters long').len({ min: 4 });
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert('email', et.translate(et.localeKey, 'email' + '.' + 'Email is not valid')).isEmail();
+  req.assert('password', et.translate(et.localeKey, 'password' + '.' + 'Password must be at least 4 characters long')).len({ min: 4 });
+  req.assert('rePassword', et.translate(et.localeKey, 'password' + '.' + 'Passwords do not match')).equals(req.body.password);
   req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
 
-  const errors = req.validationErrors();
+  const err = req.validationErrors();
 
-  if (errors) {
-    req.flash('errors', errors);
-    return res.status(500).send({
-      statusCode: 1,
-      description: 'Не верно указан логин!'
-    });
+  if (err) {
+    req.flash('errors', err);
+    return res.status(500).send(req.session.flash.errors);
   }
 
   const user = new User({
@@ -99,10 +97,12 @@ export let postSignup = (req: Request, res: Response, next: NextFunction) => {
   User.findOne({ email: req.body.email }, (err, existingUser) => {
     if (err) { return next(err); }
     if (existingUser) {
-      return res.status(500).send({
-        statusCode: 1,
-        description: 'Account with that email address already exists.'
-      });
+
+      // const f3 = app.et.translate('ua', 'a');
+      const err = new AppErrors('Account with that email address already exists.', 'account');
+
+      req.flash('errors', err);
+      return res.status(500).send(req.session.flash.errors);
     }
     user.save((err) => {
       if (err) { return next(err); }

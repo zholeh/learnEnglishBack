@@ -1,3 +1,8 @@
 {
-    
+    "a": "2",
+    "account.Account with that email address already exists.": "Пользователь с указанным email существует.",
+    "email.Email is not valid": "Email не верный",
+    "password.Password cannot be blank": "Пароль должен быть заполнен",
+    "password.Password must be at least 4 characters long": "Пароль должен быть больше 4 символов",
+    "password.Passwords do not match": "Пароли не совпадают"
 }
